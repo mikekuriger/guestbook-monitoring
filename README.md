@@ -58,6 +58,12 @@ pulumi up
 
 `pulumi up` takes about 15–20 minutes, mostly EKS cluster creation.
 
+> **First deploy in a new AWS account:** the worker node group can fail with
+> `Authentication Failure. Launching EC2 instance failed.` AWS creates the Auto Scaling service-linked role during
+> the deploy, and the first instance launch can run before that role has propagated. The Auto Scaling group retries
+> on its own and succeeds, but Pulumi has already reported the error. Run `pulumi up` again: it updates the Auto
+> Scaling group in place and finishes the deployment.
+
 ### Optional configuration
 
 | Key | Default | Purpose |
@@ -143,6 +149,10 @@ Then query `sum(rate(apache_accesses_total{namespace="guestbook"}[1m]))` in Prom
 requests/s** and **Request rate by pod** panels on the Guestbook dashboard.
 
 ## The Guestbook dashboard (stretch goal)
+
+![Guestbook dashboard in Grafana during a load test](docs/grafana-dashboard.png)
+
+*The live deployment during a 4-minute load test (~16k requests) against the Guestbook frontend.*
 
 `dashboards/guestbook.json` is loaded through a ConfigMap labelled `grafana_dashboard=1`. Grafana's dashboard sidecar
 imports it automatically. Rows:
