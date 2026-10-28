@@ -1,0 +1,6 @@
+name: guestbook-monitoring
+runtime: nodejs
+description: Kubernetes Guestbook on EKS, monitored with Prometheus and Grafana
+config:
+  aws:region:
+    value: us-west-2
